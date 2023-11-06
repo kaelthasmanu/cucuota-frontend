@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState } from "react";
+import './signin.css';
 import swal from 'sweetalert';
 import { Box, Container, color} from '@mui/system';
 import {Typography , TextField, FormControlLabel, Button, Grid , Link} from '@mui/material';
@@ -7,7 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { useNavigate } from "react-router-dom";
 
 async function loginUser(credentials) {
-  /*return fetch("https://www.mecallapi.com/api/login", {
+  /*return fetch("https://10.34.0.100/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -54,14 +55,16 @@ export default function SignIn() {
   };*/
 
   return (
-    <Container component="main" maxWidth="sm">
+    <div className='divlogin'>
+    <Container component="main" maxWidth="sm" sx={{
+      paddingTop: 30,
+    }}>
       <Box
         sx={{
           boxShadow: 3,
           borderRadius: 2,
           px: 4,
-          py: 6,
-          marginTop: 8,
+          py: 6,  
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -109,5 +112,6 @@ export default function SignIn() {
         </Box>
       </Box>
     </Container>
+  </div>
   );
 }

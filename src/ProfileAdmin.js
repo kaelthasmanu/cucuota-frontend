@@ -2,22 +2,11 @@ import React, { useState } from 'react'; // Imported React and useState
 import PropTypes from 'prop-types'; // Imported PropTypes
 import LinearProgress from '@mui/material/LinearProgress'; // Imported LinearProgress
 import { makeStyles } from '@mui/styles';
-import { Box, Typography, Avatar, IconButton, Menu, MenuItem, Card, CardContent } from '@mui/material';
+import { Box, Typography, Avatar, IconButton, Menu, MenuItem, Card, CardContent, Button } from '@mui/material';
 import AppBar from '@mui/material/AppBar'; // Added AppBar import
 import Toolbar from '@mui/material/Toolbar'; // Added Toolbar import
 import Checkbox from '@mui/material/Checkbox';
 import { useNavigate } from "react-router-dom";
-import { styled } from '@mui/material/styles';
-import Grid from '@mui/material/Unstable_Grid2';
-import Paper from '@mui/material/Paper';
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -92,6 +81,20 @@ export default function Profile() {
           <Typography variant="h6" className={classes.title}>
             Profile
           </Typography>
+            <Button variant="contained"
+                onClick={() => {
+                    alert('clicked');
+                }}
+                >
+                    Click me
+            </Button>
+            <Button variant="contained"
+                onClick={() => {
+                    alert('clicked');
+                }}
+                >
+                    Click me two
+            </Button>
             <IconButton onClick={handleMenu} color="inherit">
               <Avatar src={"https://www.pngarts.com/files/5/Cartoon-Avatar-PNG-Image-Transparent.png"} />
             </IconButton>
@@ -118,28 +121,6 @@ export default function Profile() {
           </Typography>
           <Box sx={{ width: '100%' }}>
             <LinearProgressWithLabel value={progress} />
-          </Box>
-          <Box sx={{ width: '100%' }}>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-              <Grid xs={6}>
-                <Item>Cuota Usada</Item>
-              </Grid>
-              <Grid xs={6}>
-                <Item>20GB</Item>
-              </Grid>
-              <Grid xs={6}>
-                <Item>Cuota Free</Item>
-              </Grid>
-              <Grid xs={6}>
-                <Item>30GB</Item>
-              </Grid>
-              <Grid xs={6}>
-                <Item>Cuota Total</Item>
-              </Grid>
-              <Grid xs={6}>
-                <Item>50GB</Item>
-              </Grid>
-            </Grid>
           </Box>
         </CardContent>
       </Card>
