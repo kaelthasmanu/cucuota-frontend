@@ -4,6 +4,7 @@ import swal from 'sweetalert';
 import { Box, Container, color} from '@mui/system';
 import {Typography , TextField, FormControlLabel, Button, Grid , Link} from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
+import { useNavigate } from "react-router-dom";
 
 async function loginUser(credentials) {
   /*return fetch("https://www.mecallapi.com/api/login", {
@@ -21,6 +22,7 @@ async function loginUser(credentials) {
 export default function SignIn() {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,12 +37,13 @@ export default function SignIn() {
       }).then((value) => {
         localStorage.setItem("accessToken", response["accessToken"]);
         localStorage.setItem("user", username);
-        window.location.href = "/profile";
+        navigate("/profile");
       });
     } else {
       swal("Failed", response.message, "error");
     }
   };
+
   /*const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
