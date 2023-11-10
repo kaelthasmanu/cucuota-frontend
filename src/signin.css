@@ -1,3 +1,5 @@
 .divlogin{
-    padding-top: 30;
+    display: grid;
+    place-items: center;
+    padding-top: 5%;
 }

@@ -6,6 +6,8 @@ import { Box, Container, color} from '@mui/system';
 import {Typography , TextField, FormControlLabel, Button, Grid , Link} from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import { useNavigate } from "react-router-dom";
+import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
+import { CenterFocusStrong } from '@mui/icons-material';
 
 async function loginUser(credentials) {
   /*return fetch("https://10.34.0.100/login", {
@@ -56,9 +58,7 @@ export default function SignIn() {
 
   return (
     <div className='divlogin'>
-    <Container component="main" maxWidth="sm" sx={{
-      paddingTop: 30,
-    }}>
+    <Container component="main" maxWidth="sm">
       <Box
         sx={{
           boxShadow: 3,
