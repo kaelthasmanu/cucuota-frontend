@@ -10,6 +10,17 @@ import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Unstable_Grid2';
 import Paper from '@mui/material/Paper';
+import useFetchData from './utils/CuotaData'
+
+async function getCuota() {
+  return fetch("http://localhost:5173/Cuota", {
+    method: "GET",
+    headers: {
+      "accept": "text/plain",
+    },
+  }).then((data) => data.json());
+}
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -60,7 +71,7 @@ export default function Profile() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const user = localStorage.getItem("user");
-  const navigate = useNavigate();
+  const navigate = useNavigate();  
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -76,14 +87,17 @@ export default function Profile() {
     navigate("/");
   };
 
-  React.useEffect(() => {
+  const data = useFetchData("http://localhost:5173/Cuota")
+
+
+  /*React.useEffect(() => {
     const timer = setInterval(() => {
       setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 10));
     }, 800);
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, []);*/
 
   return (
     <div className={classes.root}>

@@ -8,18 +8,17 @@ import Checkbox from '@mui/material/Checkbox';
 import { useNavigate } from "react-router-dom";
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { CenterFocusStrong } from '@mui/icons-material';
+import useAuth from "./utils/useAuth";
 
 async function loginUser(credentials) {
-  /*return fetch("https://10.34.0.100/login", {
+  return fetch("http://localhost:5173/AuthUserLDAP", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "accept": "*/*",
     },
     body: JSON.stringify(credentials),
-  }).then((data) => data.json());*/
-  console.log(JSON.stringify(credentials))
-  return {"accessToken": "njasnjfnjaskfnjasnf", "user": "manuel", "message":"Logged in"}
-  //return {"user": "manuel", "message":" User or Password Incorrect"}
+  }).then((data) => data.json());
 }
 
 export default function SignIn() {
@@ -46,15 +45,6 @@ export default function SignIn() {
       swal("Failed", response.message, "error");
     }
   };
-
-  /*const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };*/
 
   return (
     <div className='divlogin'>
