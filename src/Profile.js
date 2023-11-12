@@ -116,7 +116,8 @@ export default function Profile() {
       totalQuota: matchingTotalQuota ? matchingTotalQuota.totalQuota : 0,
     };
   });
-  console.log(combinedResults)
+  const filteredResults = combinedResults.filter((result) => result.name === user);
+  console.log(filteredResults)
 
   /*React.useEffect(() => {
     const timer = setInterval(() => {
