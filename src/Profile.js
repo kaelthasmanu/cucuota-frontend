@@ -10,10 +10,10 @@ import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Unstable_Grid2';
 import Paper from '@mui/material/Paper';
-import useFetchData from './utils/CuotaData'
+import { UseFetch } from './utils/CuotaData';
 
 async function getCuota() {
-  return fetch("http://localhost:5173/Cuota", {
+  return fetch("http://10.34.0.100:5173/Cuota", {
     method: "GET",
     headers: {
       "accept": "text/plain",
@@ -87,8 +87,36 @@ export default function Profile() {
     navigate("/");
   };
 
-  const data = useFetchData("http://localhost:5173/Cuota")
+  const { data ,pendiente } = UseFetch("http://10.34.0.100:5173/Cuota");
+  const dataTotalQuota = UseFetch("http://10.34.0.100:5173/QuotaTotal");
 
+  const results2 = Object.values(dataTotalQuota.data).map((object, j) => ({
+    ...object,
+    id: j + 1,
+    name:object.name,
+    totalQuota:object.totalQuota,
+  }));
+
+  const results = Object.values(data).map((obj, i) => ({
+    ...obj,
+    id: i + 1,
+    name:obj.name,
+    trafficD:obj.trafficD,
+    //totalQuota:obj.totalQuota,
+  }));
+
+  if (pendiente) {
+    return(<p>Cargando...</p>)
+  }
+
+  const combinedResults = results.map((user) => {
+    const matchingTotalQuota = results2.find((totalQuota) => totalQuota.name === user.name);
+    return {
+      ...user,
+      totalQuota: matchingTotalQuota ? matchingTotalQuota.totalQuota : 0,
+    };
+  });
+  console.log(combinedResults)
 
   /*React.useEffect(() => {
     const timer = setInterval(() => {
@@ -119,44 +147,49 @@ export default function Profile() {
             </Menu>
         </Toolbar>
       </AppBar>
-      <Card className={classes.root} variant="outlined">
-        <CardContent>
-          <Avatar src={"https://www.pngarts.com/files/5/Cartoon-Avatar-PNG-Image-Transparent.png"} className={classes.large} />
-          <Typography variant="h5">
-            Welcome Manuel Alberto
-          </Typography>
-        </CardContent>
-        <CardContent>
-          <Typography variant='h5'>
-            Cuota 
-          </Typography>
-          <Box sx={{ width: '100%' }}>
-            <LinearProgressWithLabel value={progress} />
-          </Box>
-          <Box sx={{ width: '100%' }}>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-              <Grid xs={6}>
-                <Item>Cuota Usada</Item>
+      <Typography variant="h5">
+            Welcome Manuel Alberto 
+      </Typography>
+      {
+       results.length===0 ? "No hay datos"
+       :
+      results.map((user) => {
+        const megasAvailable = user.totalQuota - user.trafficD;      
+        const percentageAvailable = user.totalQuota ? megasAvailable / user.totalQuota * 100 : 0;
+        return(
+        <Card key={user.name} className={classes.root} variant="outlined">
+          <CardContent>
+            <Typography variant="h5">{user.name}</Typography>
+            <Typography variant="h6">Cuota</Typography>
+            <Box sx={{ width: "100%" }}>
+              <LinearProgressWithLabel  value={percentageAvailable} />
+            </Box>
+            <Box sx={{ width: "100%" }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                <Grid xs={6}>
+                  <Item>Cuota Usada</Item>
+                </Grid>
+                <Grid xs={6}>
+                  <Item>{user.trafficD} MB</Item>
+                </Grid>
+                <Grid xs={6}>
+                  <Item>Cuota Free</Item>
+                </Grid>
+                <Grid xs={6}>
+                  <Item>{megasAvailable} MB</Item>
+                </Grid>
+                <Grid xs={6}>
+                  <Item>Cuota Total</Item>
+                </Grid>
+                <Grid xs={6}>
+                  <Item>{user.totalQuota} MB</Item>
+                </Grid>
               </Grid>
-              <Grid xs={6}>
-                <Item>20GB</Item>
-              </Grid>
-              <Grid xs={6}>
-                <Item>Cuota Free</Item>
-              </Grid>
-              <Grid xs={6}>
-                <Item>30GB</Item>
-              </Grid>
-              <Grid xs={6}>
-                <Item>Cuota Total</Item>
-              </Grid>
-              <Grid xs={6}>
-                <Item>50GB</Item>
-              </Grid>
-            </Grid>
-          </Box>
-        </CardContent>
-      </Card>
+            </Box>
+          </CardContent>
+        </Card>
+      )}
+    )}
     </div>
   );
 }

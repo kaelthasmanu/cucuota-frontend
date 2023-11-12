@@ -11,7 +11,7 @@ import { CenterFocusStrong } from '@mui/icons-material';
 import useAuth from "./utils/useAuth";
 
 async function loginUser(credentials) {
-  return fetch("http://localhost:5173/AuthUserLDAP", {
+  return fetch("http://10.34.0.100:5173/AuthUserLDAP", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
