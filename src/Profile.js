@@ -5,22 +5,11 @@ import { makeStyles } from '@mui/styles';
 import { Box, Typography, Avatar, IconButton, Menu, MenuItem, Card, CardContent } from '@mui/material';
 import AppBar from '@mui/material/AppBar'; // Added AppBar import
 import Toolbar from '@mui/material/Toolbar'; // Added Toolbar import
-import Checkbox from '@mui/material/Checkbox';
 import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Unstable_Grid2';
 import Paper from '@mui/material/Paper';
 import { UseFetch } from './utils/CuotaData';
-
-async function getCuota() {
-  return fetch("http://10.34.0.100:5173/Cuota", {
-    method: "GET",
-    headers: {
-      "accept": "text/plain",
-    },
-  }).then((data) => data.json());
-}
-
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -73,6 +62,13 @@ export default function Profile() {
   const user = localStorage.getItem("user");
   const navigate = useNavigate();  
 
+  const { data ,pendiente } = UseFetch("http://10.34.0.100:5173/Cuota");
+  const dataTotalQuota = UseFetch("http://10.34.0.100:5173/QuotaTotal");
+
+  if (pendiente) {
+    return(<p>Cargando...</p>)
+  }
+
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -87,9 +83,6 @@ export default function Profile() {
     navigate("/");
   };
 
-  const { data ,pendiente } = UseFetch("http://10.34.0.100:5173/Cuota");
-  const dataTotalQuota = UseFetch("http://10.34.0.100:5173/QuotaTotal");
-
   const results2 = Object.values(dataTotalQuota.data).map((object, j) => ({
     ...object,
     id: j + 1,
@@ -102,12 +95,7 @@ export default function Profile() {
     id: i + 1,
     name:obj.name,
     trafficD:obj.trafficD,
-    //totalQuota:obj.totalQuota,
   }));
-
-  if (pendiente) {
-    return(<p>Cargando...</p>)
-  }
 
   const combinedResults = results.map((user) => {
     const matchingTotalQuota = results2.find((totalQuota) => totalQuota.name === user.name);
@@ -116,17 +104,10 @@ export default function Profile() {
       totalQuota: matchingTotalQuota ? matchingTotalQuota.totalQuota : 0,
     };
   });
-  const filteredResults = combinedResults.filter((result) => result.name === user);
-  console.log(filteredResults)
-
-  /*React.useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 10));
-    }, 800);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);*/
+  const username = user.split('@')[0];
+  const filteredResults = combinedResults.filter((result) => result.name === username);
+  const megasAvailable = filteredResults[0].totalQuota * 1024 - filteredResults[0].trafficD;
+  const percentageAvailable = filteredResults[0].totalQuota ? (filteredResults[0].trafficD / (filteredResults[0].totalQuota * 1024)) * 100 : 0;
 
   return (
     <div className={classes.root}>
@@ -148,19 +129,9 @@ export default function Profile() {
             </Menu>
         </Toolbar>
       </AppBar>
-      <Typography variant="h5">
-            Welcome Manuel Alberto 
-      </Typography>
-      {
-       results.length===0 ? "No hay datos"
-       :
-      results.map((user) => {
-        const megasAvailable = user.totalQuota - user.trafficD;      
-        const percentageAvailable = user.totalQuota ? megasAvailable / user.totalQuota * 100 : 0;
-        return(
-        <Card key={user.name} className={classes.root} variant="outlined">
+        <Card key={filteredResults[0].name} className={classes.root} variant="outlined">
           <CardContent>
-            <Typography variant="h5">{user.name}</Typography>
+            <Typography variant="h5">{filteredResults[0].name}</Typography>
             <Typography variant="h6">Cuota</Typography>
             <Box sx={{ width: "100%" }}>
               <LinearProgressWithLabel  value={percentageAvailable} />
@@ -171,7 +142,7 @@ export default function Profile() {
                   <Item>Cuota Usada</Item>
                 </Grid>
                 <Grid xs={6}>
-                  <Item>{user.trafficD} MB</Item>
+                  <Item>{filteredResults[0].trafficD} MB</Item>
                 </Grid>
                 <Grid xs={6}>
                   <Item>Cuota Free</Item>
@@ -183,14 +154,12 @@ export default function Profile() {
                   <Item>Cuota Total</Item>
                 </Grid>
                 <Grid xs={6}>
-                  <Item>{user.totalQuota} MB</Item>
+                  <Item>{filteredResults[0].totalQuota * 1024} MB</Item>
                 </Grid>
               </Grid>
             </Box>
           </CardContent>
-        </Card>
-      )}
-    )}
+        </Card> 
     </div>
   );
 }
