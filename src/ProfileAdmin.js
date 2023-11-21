@@ -5,8 +5,22 @@ import { makeStyles } from '@mui/styles';
 import { Box, Typography, Avatar, IconButton, Menu, MenuItem, Card, CardContent, Button } from '@mui/material';
 import AppBar from '@mui/material/AppBar'; // Added AppBar import
 import Toolbar from '@mui/material/Toolbar'; // Added Toolbar import
-import Checkbox from '@mui/material/Checkbox';
 import { useNavigate } from "react-router-dom";
+import { styled } from '@mui/material/styles';
+import Grid from '@mui/material/Unstable_Grid2';
+import Paper from '@mui/material/Paper';
+import { UseFetch } from './utils/CuotaData';
+// Importa tus nuevos componentes aquí
+import UserList from './components/UserList';  // Ajusta la ruta según sea necesario
+import QuotaManagement from './components/QuotaManagement';  // Ajusta la ruta según sea necesario
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,7 +63,17 @@ export default function Profile() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const user = localStorage.getItem("user");
-  const navigate = useNavigate();
+  const navigate = useNavigate();  
+  // Nuevo estado para gestionar qué componente mostrar
+  const [showUserList, setShowUserList] = useState(false);
+  const [showQuotaManagement, setShowQuotaManagement] = useState(false);
+
+  const { data ,pendiente } = UseFetch("http://10.34.0.100:5173/Cuota");
+  const dataTotalQuota = UseFetch("http://10.34.0.100:5173/QuotaTotal");
+
+  if (pendiente) {
+    return(<p>Cargando...</p>)
+  }
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -65,14 +89,31 @@ export default function Profile() {
     navigate("/");
   };
 
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 10));
-    }, 800);
-    return () => {
-      clearInterval(timer);
+  const results2 = Object.values(dataTotalQuota.data).map((object, j) => ({
+    ...object,
+    id: j + 1,
+    name:object.name,
+    totalQuota:object.totalQuota,
+  }));
+
+  const results = Object.values(data).map((obj, i) => ({
+    ...obj,
+    id: i + 1,
+    name:obj.name,
+    trafficD:obj.trafficD,
+  }));
+
+  const combinedResults = results.map((user) => {
+    const matchingTotalQuota = results2.find((totalQuota) => totalQuota.name === user.name);
+    return {
+      ...user,
+      totalQuota: matchingTotalQuota ? matchingTotalQuota.totalQuota : 0,
     };
-  }, []);
+  });
+  const username = user.split('@')[0];
+  const filteredResults = combinedResults.filter((result) => result.name === username);
+  const megasAvailable = filteredResults[0].totalQuota * 1024 - filteredResults[0].trafficD;
+  const percentageAvailable = filteredResults[0].totalQuota ? (filteredResults[0].trafficD / (filteredResults[0].totalQuota * 1024)) * 100 : 0;
 
   return (
     <div className={classes.root}>
@@ -81,20 +122,24 @@ export default function Profile() {
           <Typography variant="h6" className={classes.title}>
             Profile
           </Typography>
-            <Button variant="contained"
-                onClick={() => {
-                    alert('clicked');
-                }}
-                >
-                    Click me
-            </Button>
-            <Button variant="contained"
-                onClick={() => {
-                    alert('clicked');
-                }}
-                >
-                    Click me two
-            </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setShowUserList(true);
+              setShowQuotaManagement(false);
+            }}
+          >
+            Click me
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setShowUserList(false);
+              setShowQuotaManagement(true);
+            }}
+          >
+            Click me two
+          </Button>
             <IconButton onClick={handleMenu} color="inherit">
               <Avatar src={"https://www.pngarts.com/files/5/Cartoon-Avatar-PNG-Image-Transparent.png"} />
             </IconButton>
@@ -108,22 +153,39 @@ export default function Profile() {
             </Menu>
         </Toolbar>
       </AppBar>
-      <Card className={classes.root} variant="outlined">
-        <CardContent>
-          <Avatar src={"https://www.pngarts.com/files/5/Cartoon-Avatar-PNG-Image-Transparent.png"} className={classes.large} />
-          <Typography variant="h5">
-            Welcome Manuel Alberto
-          </Typography>
-        </CardContent>
-        <CardContent>
-          <Typography variant='h5'>
-            Cuota 
-          </Typography>
-          <Box sx={{ width: '100%' }}>
-            <LinearProgressWithLabel value={progress} />
-          </Box>
-        </CardContent>
-      </Card>
+      {showUserList && <UserList />}
+      {showQuotaManagement && <QuotaManagement />}
+        <Card key={filteredResults[0].name} className={classes.root} variant="outlined">
+          <CardContent>
+            <Typography variant="h5">{filteredResults[0].name}</Typography>
+            <Typography variant="h6">Cuota</Typography>
+            <Box sx={{ width: "100%" }}>
+              <LinearProgressWithLabel  value={percentageAvailable} />
+            </Box>
+            <Box sx={{ width: "100%" }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                <Grid xs={6}>
+                  <Item>Cuota Usada</Item>
+                </Grid>
+                <Grid xs={6}>
+                  <Item>{filteredResults[0].trafficD} MB</Item>
+                </Grid>
+                <Grid xs={6}>
+                  <Item>Cuota Free</Item>
+                </Grid>
+                <Grid xs={6}>
+                  <Item>{megasAvailable} MB</Item>
+                </Grid>
+                <Grid xs={6}>
+                  <Item>Cuota Total</Item>
+                </Grid>
+                <Grid xs={6}>
+                  <Item>{filteredResults[0].totalQuota * 1024} MB</Item>
+                </Grid>
+              </Grid>
+            </Box>
+          </CardContent>
+        </Card> 
     </div>
   );
 }

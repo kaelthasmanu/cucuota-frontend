@@ -8,7 +8,6 @@ import Checkbox from '@mui/material/Checkbox';
 import { useNavigate } from "react-router-dom";
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { CenterFocusStrong } from '@mui/icons-material';
-import useAuth from "./utils/useAuth";
 
 async function loginUser(credentials) {
   return fetch("http://10.34.0.100:5173/AuthUserLDAP", {
@@ -58,7 +57,7 @@ export default function SignIn() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          backgroundColor: "teal"
+          backgroundColor: "lightgray"
         }}
       >
         <Typography component="h1" variant="h5">
