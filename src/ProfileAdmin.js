@@ -127,8 +127,14 @@ export default function Profile() {
           <Button 
             variant="contained"
             onClick={() => {
-              setShowUserList(true);
-              setShowQuotaManagement(false);
+              if(showUserList === false){
+                setShowUserList(true);
+                setShowQuotaManagement(false);
+              }
+              else{
+                setShowUserList(false);
+                setShowQuotaManagement(false);
+              }
             }}
           >
             Click me
@@ -136,8 +142,14 @@ export default function Profile() {
           <Button
             variant="contained"
             onClick={() => {
-              setShowUserList(false);
-              setShowQuotaManagement(true);
+              if(showQuotaManagement === false){
+                setShowUserList(false);
+                setShowQuotaManagement(true);
+              }
+              else{
+                setShowUserList(false);
+                setShowQuotaManagement(false);
+              }
             }}
           >
             Click me two
