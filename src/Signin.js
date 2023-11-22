@@ -38,7 +38,8 @@ export default function SignIn() {
       }).then((value) => {
         localStorage.setItem("accessToken", response["accessToken"]);
         localStorage.setItem("user", username);
-        navigate("/profile");
+        //navigate("/profile");
+        navigate("adminprofile");
       });
     } else {
       swal("Failed", response.message, "error");

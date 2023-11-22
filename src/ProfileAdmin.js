@@ -13,6 +13,7 @@ import { UseFetch } from './utils/CuotaData';
 // Importa tus nuevos componentes aquí
 import UserList from './components/UserList';  // Ajusta la ruta según sea necesario
 import QuotaManagement from './components/QuotaManagement';  // Ajusta la ruta según sea necesario
+import './css/ProfileAdmin.css'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -29,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing,
   },
-  title: {
-    flexGrow: 1,
+  title: {    
+    
   },
   large: {
     width: theme.spacing,
@@ -119,10 +120,11 @@ export default function Profile() {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6">
             Profile
           </Typography>
-          <Button
+          <div className='buttons-topbar'>
+          <Button 
             variant="contained"
             onClick={() => {
               setShowUserList(true);
@@ -140,6 +142,7 @@ export default function Profile() {
           >
             Click me two
           </Button>
+          </div>
             <IconButton onClick={handleMenu} color="inherit">
               <Avatar src={"https://www.pngarts.com/files/5/Cartoon-Avatar-PNG-Image-Transparent.png"} />
             </IconButton>
