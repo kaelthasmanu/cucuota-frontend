@@ -111,6 +111,7 @@ export default function Profile() {
       totalQuota: matchingTotalQuota ? matchingTotalQuota.totalQuota : 0,
     };
   });
+  
   const username = user.split('@')[0];
   const filteredResults = combinedResults.filter((result) => result.name === username);
   const megasAvailable = filteredResults[0].totalQuota * 1024 - filteredResults[0].trafficD;
@@ -137,7 +138,7 @@ export default function Profile() {
               }
             }}
           >
-            Click me
+            Agregar Admin
           </Button>
           <Button
             variant="contained"
@@ -152,7 +153,7 @@ export default function Profile() {
               }
             }}
           >
-            Click me two
+            Cambiar Cuota
           </Button>
           </div>
             <IconButton onClick={handleMenu} color="inherit">
