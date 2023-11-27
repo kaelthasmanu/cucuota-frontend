@@ -10,7 +10,7 @@ import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { CenterFocusStrong } from '@mui/icons-material';
 
 async function loginUser(credentials) {
-  return fetch("http://10.34.0.100:5173/AuthUserLDAP", {
+  return fetch("http://10.34.8.66:5173/AuthUserLDAP", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -38,8 +38,8 @@ export default function SignIn() {
       }).then((value) => {
         localStorage.setItem("accessToken", response["accessToken"]);
         localStorage.setItem("user", username);
-        //navigate("/profile");
-        navigate("adminprofile");
+        navigate("/profile");
+        //navigate("adminprofile");
       });
     } else {
       swal("Failed", response.message, "error");
@@ -61,6 +61,7 @@ export default function SignIn() {
           backgroundColor: "lightgray"
         }}
       >
+        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>

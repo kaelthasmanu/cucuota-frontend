@@ -4,26 +4,28 @@ import {
   TextField,
   Button,
   Box,
+  AlertTitle,
+  Alert,
 } from '@mui/material';
 
 const QuotaManagement = () => {
   const [username, setUsername] = useState('');
   const [userData, setUserData] = useState(null);
   const [gigabytes, setGigabytes] = useState(0);
+  const [alertStatus, setAlertStatus] = useState(null);
+  const [newQuota, setNewQuota] = useState(null)
 
   useEffect(() => {
     // Simular una llamada a la API para obtener los datos del usuario
     const fetchData = async () => {
       // Reemplaza la URL con tu API real
-      const response = await fetch('http://10.34.0.100:5173/QuotaTotal');
+      const response = await fetch('http://10.34.8.66:5173/QuotaTotal');
       const data = await response.json();
       data.forEach(element => {
-        if(element.name === localStorage.getItem('user').split('@')[0]){
-          console.log(element.totalQuota)
+        if (element.name === localStorage.getItem('user').split('@')[0]) {
           setUserData(element.totalQuota);
         }
       });
-      
     };
 
     fetchData();
@@ -35,7 +37,7 @@ const QuotaManagement = () => {
       gigabytes: Number(gigabytes)
     };
   
-    fetch(url, {
+    return fetch(url, {
       method: 'POST',
       headers: {
         'Accept': '*/*',
@@ -44,16 +46,18 @@ const QuotaManagement = () => {
       body: JSON.stringify(data)
     })
       .then(response => {
-          if (!response.ok){
+        if (!response.ok) {
           console.log(`Status: ${response.status}`);
+          setAlertStatus('error');
+        } else {
+          setAlertStatus('success');
+          setNewQuota(gigabytes);
         }
-        return response.status
-      })
-      .then(data => {
-        console.log('Success:', data);
+        return response.status;
       })
       .catch(error => {
         console.error('Error:', error);
+        setAlertStatus('error');
       });
   };
 
@@ -76,10 +80,30 @@ const QuotaManagement = () => {
             value={gigabytes}
             onChange={(e) => setGigabytes(parseInt(e.target.value, 10))}
           />
-          <Typography variant="body1">{`Nueva Cuota: ${userData.quota + gigabytes} GB`}</Typography>
-          <Button variant="contained" onClick={() => sendData('http://10.34.0.100:5173/ChangeQuota', username, gigabytes)}>
+          <Typography variant="body1">{`Nueva Cuota: ${newQuota} GB`}</Typography>
+          <Button variant="contained" onClick={async () => {
+            const status = await sendData('http://10.34.8.66:5173/ChangeQuota', username, gigabytes);
+            if (status === 200) {
+              setAlertStatus('success');
+              setTimeout(() => {
+                setAlertStatus(null);
+              }, 3000);
+            }
+          }}>
             Enviar
           </Button>
+          {alertStatus === 'success' && (
+            <Alert severity="success">
+              <AlertTitle>Correcto</AlertTitle>
+              Cuota Actualizada
+            </Alert>
+          )}
+          {alertStatus === 'error' && (
+            <Alert severity="error">
+              <AlertTitle>Error</AlertTitle>
+              Ha ocurrido un Error
+            </Alert>
+          )}
         </Box>
       )}
     </div>

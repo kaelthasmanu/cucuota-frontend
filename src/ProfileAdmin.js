@@ -69,8 +69,8 @@ export default function Profile() {
   const [showUserList, setShowUserList] = useState(false);
   const [showQuotaManagement, setShowQuotaManagement] = useState(false);
 
-  const { data ,pendiente } = UseFetch("http://10.34.0.100:5173/Cuota");
-  const dataTotalQuota = UseFetch("http://10.34.0.100:5173/QuotaTotal");
+  const { data ,pendiente } = UseFetch("http://10.34.8.66:5173/Cuota");
+  const dataTotalQuota = UseFetch("http://10.34.8.66:5173/QuotaTotal");
 
   if (pendiente) {
     return(<p>Cargando...</p>)
