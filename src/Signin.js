@@ -39,12 +39,12 @@ export default function SignIn() {
       }).then((value) => {
         localStorage.setItem("accessToken", response["accessToken"]);
         localStorage.setItem("user", username);
-        if(response["admin"] === null){
-          navigate("/profile");
+        if("admin" in response){
+          localStorage.setItem("admin", response["admin"]);
+          navigate("/adminprofile");
         }
         else{
-          localStorage.setItem("admin", response["admin"]);
-          navigate("adminprofile");
+          navigate("/profile");
         }
       });
     } else {
