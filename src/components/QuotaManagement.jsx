@@ -7,6 +7,7 @@ import {
   AlertTitle,
   Alert,
 } from '@mui/material';
+import config from '../config.json'
 
 const QuotaManagement = () => {
   const [username, setUsername] = useState('');
@@ -19,7 +20,7 @@ const QuotaManagement = () => {
     // Simular una llamada a la API para obtener los datos del usuario
     const fetchData = async () => {
       // Reemplaza la URL con tu API real
-      const response = await fetch('http://10.34.8.66:5173/QuotaTotal');
+      const response = await fetch(config.ServerApi+'/QuotaTotal');
       const data = await response.json();
       data.forEach(element => {
         if (element.name === localStorage.getItem('user').split('@')[0]) {
@@ -82,9 +83,15 @@ const QuotaManagement = () => {
           />
           <Typography variant="body1">{`Nueva Cuota: ${newQuota} GB`}</Typography>
           <Button variant="contained" onClick={async () => {
-            const status = await sendData('http://10.34.8.66:5173/ChangeQuota', username, gigabytes);
+            const status = await sendData(config.ServerApi+'/ChangeQuota', username, gigabytes);
             if (status === 200) {
               setAlertStatus('success');
+              setTimeout(() => {
+                setAlertStatus(null);
+              }, 3000);
+            }
+            else{
+              setAlertStatus('error');
               setTimeout(() => {
                 setAlertStatus(null);
               }, 3000);

@@ -14,6 +14,7 @@ import { UseFetch } from './utils/CuotaData';
 import UserList from './components/UserList';  // Ajusta la ruta según sea necesario
 import QuotaManagement from './components/QuotaManagement';  // Ajusta la ruta según sea necesario
 import './css/ProfileAdmin.css'
+import config from './config.json'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -69,8 +70,8 @@ export default function Profile() {
   const [showUserList, setShowUserList] = useState(false);
   const [showQuotaManagement, setShowQuotaManagement] = useState(false);
 
-  const { data ,pendiente } = UseFetch("http://10.34.8.66:5173/Cuota");
-  const dataTotalQuota = UseFetch("http://10.34.8.66:5173/QuotaTotal");
+  const { data ,pendiente } = UseFetch(config.ServerApi+"/Cuota");
+  const dataTotalQuota = UseFetch(config.ServerApi+"/QuotaTotal");
 
   if (pendiente) {
     return(<p>Cargando...</p>)
@@ -87,6 +88,7 @@ export default function Profile() {
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("user");
+    localStorage.removeItem("admin");
     navigate("/");
   };
 
@@ -121,6 +123,7 @@ export default function Profile() {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
+        <Avatar alt="Universidad Matanzas" src="/static/images/avatar/1.jpg" />
           <Typography variant="h6">
             Profile
           </Typography>

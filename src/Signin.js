@@ -3,14 +3,15 @@ import { useState } from "react";
 import './signin.css';
 import swal from 'sweetalert';
 import { Box, Container, color} from '@mui/system';
-import {Typography , TextField, FormControlLabel, Button, Grid , Link} from '@mui/material';
+import {Typography , TextField, FormControlLabel, Button, Grid , Link, Avatar} from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import { useNavigate } from "react-router-dom";
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { CenterFocusStrong } from '@mui/icons-material';
+import config from './config.json'
 
 async function loginUser(credentials) {
-  return fetch("http://10.34.8.66:5173/AuthUserLDAP", {
+  return fetch(config.ServerApi+"/AuthUserLDAP", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -38,8 +39,13 @@ export default function SignIn() {
       }).then((value) => {
         localStorage.setItem("accessToken", response["accessToken"]);
         localStorage.setItem("user", username);
-        navigate("/profile");
-        //navigate("adminprofile");
+        if(response["admin"] === null){
+          navigate("/profile");
+        }
+        else{
+          localStorage.setItem("admin", response["admin"]);
+          navigate("adminprofile");
+        }
       });
     } else {
       swal("Failed", response.message, "error");
@@ -61,7 +67,7 @@ export default function SignIn() {
           backgroundColor: "lightgray"
         }}
       >
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+        <Avatar alt="Universidad Matanzas" src="/static/images/avatar/1.jpg" />
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
