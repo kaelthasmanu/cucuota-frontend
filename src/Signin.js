@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { CenterFocusStrong } from '@mui/icons-material';
 import config from './config.json'
+import logo from './assets/logo.jpg'
 
 async function loginUser(credentials) {
   return fetch(config.ServerApi+"/AuthUserLDAP", {
@@ -39,13 +40,14 @@ export default function SignIn() {
       }).then((value) => {
         localStorage.setItem("accessToken", response["accessToken"]);
         localStorage.setItem("user", username);
-        if("admin" in response){
-          localStorage.setItem("admin", response["admin"]);
-          navigate("/adminprofile");
-        }
-        else{
-          navigate("/profile");
-        }
+        navigate("/adminprofile");
+        //if("admin" in response){
+          //localStorage.setItem("admin", response["admin"]);
+          //navigate("/adminprofile");
+        //}
+        //else{
+          //navigate("/profile");
+        //}
       });
     } else {
       swal("Failed", response.message, "error");
@@ -67,7 +69,7 @@ export default function SignIn() {
           backgroundColor: "lightgray"
         }}
       >
-        <Avatar alt="Universidad Matanzas" src="/static/images/avatar/1.jpg" />
+        <Avatar alt="Universidad Matanzas" src='logo' />
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>

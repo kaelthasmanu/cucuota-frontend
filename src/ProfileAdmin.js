@@ -1,20 +1,20 @@
-import React, { useState } from 'react'; // Imported React and useState
-import PropTypes from 'prop-types'; // Imported PropTypes
-import LinearProgress from '@mui/material/LinearProgress'; // Imported LinearProgress
+import React, { useState } from 'react';
+import PropTypes from 'prop-types'; 
+import LinearProgress from '@mui/material/LinearProgress'; 
 import { makeStyles } from '@mui/styles';
-import { Box, Typography, Avatar, IconButton, Menu, MenuItem, Card, CardContent, Button } from '@mui/material';
-import AppBar from '@mui/material/AppBar'; // Added AppBar import
-import Toolbar from '@mui/material/Toolbar'; // Added Toolbar import
+import { Box, Typography, Avatar, IconButton, Menu, MenuItem, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from '@mui/material';
+import AppBar from '@mui/material/AppBar'; 
+import Toolbar from '@mui/material/Toolbar'; 
 import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Unstable_Grid2';
 import Paper from '@mui/material/Paper';
 import { UseFetch } from './utils/CuotaData';
-// Importa tus nuevos componentes aquí
-import UserList from './components/UserList';  // Ajusta la ruta según sea necesario
-import QuotaManagement from './components/QuotaManagement';  // Ajusta la ruta según sea necesario
+import UserList from './components/UserList'; 
+import QuotaManagement from './components/QuotaManagement'; 
 import './css/ProfileAdmin.css'
 import config from './config.json'
+import ApiCallComponent from './components/TotalQuota';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -72,6 +72,7 @@ export default function Profile() {
 
   const { data ,pendiente } = UseFetch(config.ServerApi+"/Cuota");
   const dataTotalQuota = UseFetch(config.ServerApi+"/QuotaTotal");
+  const [openC, setOpen] = useState(false);
 
   if (pendiente) {
     return(<p>Cargando...</p>)
@@ -83,6 +84,15 @@ export default function Profile() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  
+
+  const handleOpenC = () => {
+    setOpen(true);
+  };
+
+  const handleCloseC = () => {
+    setOpen(false);
   };
 
   const handleLogout = () => {
@@ -123,7 +133,7 @@ export default function Profile() {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-        <Avatar alt="Universidad Matanzas" src="/static/images/avatar/1.jpg" />
+        <Avatar alt="Universidad Matanzas" src="./assets/logo.jpg" />
           <Typography variant="h6">
             Profile
           </Typography>
@@ -157,6 +167,9 @@ export default function Profile() {
             }}
           >
             Cambiar Cuota
+          </Button>
+          <Button variant="contained" onClick={handleOpenC}>
+            Total Quota
           </Button>
           </div>
             <IconButton onClick={handleMenu} color="inherit">
@@ -203,6 +216,12 @@ export default function Profile() {
                 </Grid>
               </Grid>
             </Box>
+            <Dialog open={openC} onClose={handleCloseC} maxWidth="md" fullWidth>
+              <DialogTitle>Datos de la API</DialogTitle>
+                <DialogContent>
+              <ApiCallComponent />
+              </DialogContent>
+            </Dialog>
           </CardContent>
         </Card> 
     </div>
