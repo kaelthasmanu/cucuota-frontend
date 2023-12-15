@@ -15,6 +15,7 @@ import QuotaManagement from './components/QuotaManagement';
 import './css/ProfileAdmin.css'
 import config from './config.json'
 import ApiCallComponent from './components/TotalQuota';
+import image from './assets/logo.jpg';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -120,20 +121,22 @@ export default function Profile() {
     const matchingTotalQuota = results2.find((totalQuota) => totalQuota.name === user.name);
     return {
       ...user,
-      totalQuota: matchingTotalQuota ? matchingTotalQuota.totalQuota : 0,
+      totalQuota: matchingTotalQuota?.totalQuota || 0,
     };
   });
   
   const username = user.split('@')[0];
   const filteredResults = combinedResults.filter((result) => result.name === username);
-  const megasAvailable = filteredResults[0].totalQuota * 1024 - filteredResults[0].trafficD;
-  const percentageAvailable = filteredResults[0].totalQuota ? (filteredResults[0].trafficD / (filteredResults[0].totalQuota * 1024)) * 100 : 0;
+  const megasAvailable = filteredResults[0]?.totalQuota * 1024 - filteredResults[0]?.trafficD;
+  const percentageAvailable = filteredResults[0]?.totalQuota
+  ? (filteredResults[0]?.trafficD / (filteredResults[0]?.totalQuota * 1024)) * 100
+  : 0;
 
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-        <Avatar alt="Universidad Matanzas" src="./assets/logo.jpg" />
+        <img src={image} height="40" alt="Logo Universidad" />
           <Typography variant="h6">
             Profile
           </Typography>
@@ -169,7 +172,7 @@ export default function Profile() {
             Cambiar Cuota
           </Button>
           <Button variant="contained" onClick={handleOpenC}>
-            Total Quota
+            Total Cuota
           </Button>
           </div>
             <IconButton onClick={handleMenu} color="inherit">

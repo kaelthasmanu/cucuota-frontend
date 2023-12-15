@@ -10,6 +10,7 @@ import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Unstable_Grid2';
 import Paper from '@mui/material/Paper';
 import { UseFetch } from './utils/CuotaData';
+import image from './assets/logo.jpg';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -113,6 +114,7 @@ export default function Profile() {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
+        <img src={image} height="40" alt="Logo Universidad" />
           <Typography variant="h6" className={classes.title}>
             Profile
           </Typography>

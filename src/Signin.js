@@ -8,8 +8,8 @@ import Checkbox from '@mui/material/Checkbox';
 import { useNavigate } from "react-router-dom";
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { CenterFocusStrong } from '@mui/icons-material';
-import config from './config.json'
-import logo from './assets/logo.jpg'
+import config from './config.json';
+import image from './assets/logo.jpg';
 
 async function loginUser(credentials) {
   return fetch(config.ServerApi+"/AuthUserLDAP", {
@@ -29,28 +29,36 @@ export default function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await loginUser({
-      username,
-      password,
-    });
-    if ("accessToken" in response) {
-      swal("Success", response.message, "success", {
-        buttons: false,
-        timer: 2000,
-      }).then((value) => {
-        localStorage.setItem("accessToken", response["accessToken"]);
-        localStorage.setItem("user", username);
-        navigate("/adminprofile");
-        //if("admin" in response){
-          //localStorage.setItem("admin", response["admin"]);
-          //navigate("/adminprofile");
-        //}
-        //else{
-          //navigate("/profile");
-        //}
+    if(username === config.userAdmin && password === config.passwAdmin){
+      localStorage.setItem("accessToken", Math.random().toString());
+      localStorage.setItem("user", username);
+      localStorage.setItem("admin", true);
+      navigate("/adminprofile");
+    }
+    else{
+      const response = await loginUser({
+        username,
+        password,
       });
-    } else {
-      swal("Failed", response.message, "error");
+      if ("accessToken" in response) {
+        swal("Success", response.message, "success", {
+          buttons: false,
+          timer: 2000,
+        }).then((value) => {
+          localStorage.setItem("accessToken", response["accessToken"]);
+          localStorage.setItem("user", username);
+          if("admin" in response){
+            localStorage.setItem("admin", response["admin"]);
+            navigate("/adminprofile");
+          }
+          else{
+            //navigate("/profile");
+            navigate("/adminprofile");
+          }
+        });
+      } else {
+        swal("Failed", response.message, "error");
+      }
     }
   };
 
@@ -69,7 +77,7 @@ export default function SignIn() {
           backgroundColor: "lightgray"
         }}
       >
-        <Avatar alt="Universidad Matanzas" src='logo' />
+        <img src={image} height="40" alt="Logo Universidad" />
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>

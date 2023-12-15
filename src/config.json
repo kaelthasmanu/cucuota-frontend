@@ -1,3 +1,5 @@
 {
-    "ServerApi":"http://10.34.8.66:5173"
+    "ServerApi":"http://10.34.8.66:5173",
+    "userAdmin":"admin",
+    "passwAdmin":"admin"
 }
