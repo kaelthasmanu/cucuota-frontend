@@ -62,9 +62,9 @@ const ApiCallComponent = () => {
               <TableBody>
                 {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                   <TableRow key={row.name}>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.trafficD}</TableCell>
-                  </TableRow>
+                  <TableCell>{row.name === "-" ? "Total" : row.name}</TableCell>
+                  <TableCell>{Math.round(row.trafficD / 1024)} GB</TableCell>
+                </TableRow>
                 ))}
               </TableBody>
             </Table>
