@@ -87,28 +87,90 @@ export default function Profile() {
   const results2 = Object.values(dataTotalQuota.data).map((object, j) => ({
     ...object,
     id: j + 1,
-    name:object.name,
-    totalQuota:object.totalQuota,
+    name: object.name || "Nan",
+    totalQuota: object.totalQuota || 0,
   }));
 
   const results = Object.values(data).map((obj, i) => ({
     ...obj,
     id: i + 1,
-    name:obj.name,
-    trafficD:obj.trafficD,
+    name: obj.name || "Nan",
+    trafficD: obj.trafficD || 0,
   }));
 
   const combinedResults = results.map((user) => {
     const matchingTotalQuota = results2.find((totalQuota) => totalQuota.name === user.name);
     return {
       ...user,
-      totalQuota: matchingTotalQuota ? matchingTotalQuota.totalQuota : 0,
+      totalQuota: matchingTotalQuota?.totalQuota || 0,
     };
   });
-  const username = user.split('@')[0];
+
+  const username = user ? user.split('@')[0] : "Nan";
   const filteredResults = combinedResults.filter((result) => result.name === username);
-  const megasAvailable = filteredResults[0].totalQuota * 1024 - filteredResults[0].trafficD;
-  const percentageAvailable = filteredResults[0].totalQuota ? (filteredResults[0].trafficD / (filteredResults[0].totalQuota * 1024)) * 100 : 0;
+  const megasAvailable = filteredResults[0]?.totalQuota * 1024 - (filteredResults[0]?.trafficD || 0);
+  const percentageAvailable = filteredResults[0]?.totalQuota
+    ? (filteredResults[0]?.trafficD / (filteredResults[0]?.totalQuota * 1024)) * 100
+    : 0;
+  
+    if (!filteredResults[0]) {
+      // handle the case when filteredResults[0] is undefined
+      return(
+        <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+          <img src={image} height="40" alt="Logo Universidad" />
+            <Typography variant="h6">
+              Profile
+            </Typography>
+              <IconButton onClick={handleMenu} color="inherit">
+                <Avatar src={"https://www.pngarts.com/files/5/Cartoon-Avatar-PNG-Image-Transparent.png"} />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+          </Toolbar>
+        </AppBar>
+        <Card key={user} className={classes.root} variant="outlined">
+            <CardContent>
+              <Typography variant="h5">{user}</Typography>
+              <Typography variant="h6">Cuota</Typography>
+              <Box sx={{ width: "100%" }}>
+                <LinearProgressWithLabel  value={0} />
+              </Box>
+              <Box sx={{ width: "100%" }}>
+                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                  <Grid xs={6}>
+                    <Item>Cuota Usada</Item>
+                  </Grid>
+                  <Grid xs={6}>
+                    <Item>{0} MB</Item>
+                  </Grid>
+                  <Grid xs={6}>
+                    <Item>Cuota Free</Item>
+                  </Grid>
+                  <Grid xs={6}>
+                    <Item>{0} MB</Item>
+                  </Grid>
+                  <Grid xs={6}>
+                    <Item>Cuota Total</Item>
+                  </Grid>
+                  <Grid xs={6}>
+                    <Item>{0} MB</Item>
+                  </Grid>
+                </Grid>
+              </Box>
+            </CardContent>
+          </Card> 
+      <p>No data available for the current user.</p>
+      </div>
+      ) 
+    }
 
   return (
     <div className={classes.root}>

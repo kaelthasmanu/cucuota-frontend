@@ -52,8 +52,7 @@ export default function SignIn() {
             navigate("/adminprofile");
           }
           else{
-            //navigate("/profile");
-            navigate("/adminprofile");
+            navigate("/profile");
           }
         });
       } else {
