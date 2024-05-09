@@ -3,7 +3,7 @@ import { useState } from "react";
 import './signin.css';
 import swal from 'sweetalert';
 import { Box, Container, color} from '@mui/system';
-import {Typography , TextField, FormControlLabel, Button, Grid , Link, Avatar} from '@mui/material';
+import {Typography , TextField, FormControlLabel, Button, Grid , Link, Avatar, FormControl, InputLabel, MenuItem, Select} from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import { useNavigate } from "react-router-dom";
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
@@ -11,20 +11,11 @@ import { CenterFocusStrong } from '@mui/icons-material';
 import config from './config.json';
 import image from './assets/logo.jpg';
 
-async function loginUser(credentials) {
-  return fetch(config.ServerApi+"/AuthUserLDAP", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "accept": "*/*",
-    },
-    body: JSON.stringify(credentials),
-  }).then((data) => data.json());
-}
 
 export default function SignIn() {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
+  const [auth, setAuth] = useState();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -60,6 +51,29 @@ export default function SignIn() {
       }
     }
   };
+  
+  async function loginUser(credentials) {
+    if(auth == "LDAP"){
+      return fetch(config.ServerApi+"/AuthUserLDAP", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+        },
+        body: JSON.stringify(credentials),
+      }).then((data) => data.json());
+    }
+    if(auth == "Local"){
+      return fetch(config.ServerApi+"/AuthUserLocal/Auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "*/*",
+        },
+        body: JSON.stringify(credentials),
+      }).then((data) => data.json());
+    }
+  }
 
   return (
     <div className='divlogin'>
@@ -103,6 +117,19 @@ export default function SignIn() {
             autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value)}
           />
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Authentication</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={auth}
+                label="Authentication"
+                onChange={(e) => setAuth(e.target.value)}
+              >
+                <MenuItem value={"LDAP"}>LDAP</MenuItem>
+                <MenuItem value={"Local"}>Local</MenuItem>
+              </Select>
+          </FormControl>
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
