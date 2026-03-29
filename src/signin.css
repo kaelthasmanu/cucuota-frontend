@@ -1,5 +1,26 @@
-.divlogin{
-    display: grid;
-    place-items: center;
-    padding-top: 5%;
+.divlogin {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.15), rgba(8,28,70,0.4));
+}
+
+.MuiContainer-root {
+  max-width: 500px !important;
+}
+
+.MuiBox-root {
+  background-color: var(--card-bg);
+}
+
+.MuiTypography-h5 {
+  margin-top: 12px;
+  font-weight: 700;
+}
+
+.MuiFormControl-root {
+  margin-top: 8px;
+  margin-bottom: 8px;
 }

@@ -1,11 +1,10 @@
-import React, { useState } from 'react'; // Imported React and useState
-import PropTypes from 'prop-types'; // Imported PropTypes
-import LinearProgress from '@mui/material/LinearProgress'; // Imported LinearProgress
-import { makeStyles } from '@mui/styles';
+import React from 'react';
+import PropTypes from 'prop-types';
+import LinearProgress from '@mui/material/LinearProgress';
 import { Box, Typography, Avatar, IconButton, Menu, MenuItem, Card, CardContent } from '@mui/material';
-import AppBar from '@mui/material/AppBar'; // Added AppBar import
-import Toolbar from '@mui/material/Toolbar'; // Added Toolbar import
-import { useNavigate } from "react-router-dom";
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Unstable_Grid2';
 import Paper from '@mui/material/Paper';
@@ -20,21 +19,14 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing,
-  },
-  title: {
-    flexGrow: 1,
-  },
-  large: {
-    width: theme.spacing,
-    height: theme.spacing,
-  },
-}));
+const rootStyles = {
+  flexGrow: 1,
+  p: 2,
+};
+
+const titleStyles = {
+  flexGrow: 1,
+};
 
 function LinearProgressWithLabel(props) {
   return (
@@ -57,7 +49,6 @@ LinearProgressWithLabel.propTypes = {
 
 export default function Profile() {
   const [progress, setProgress] = React.useState(10);
-  const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const user = localStorage.getItem("user");
@@ -116,7 +107,7 @@ export default function Profile() {
     if (!filteredResults[0]) {
       // handle the case when filteredResults[0] is undefined
       return(
-        <div className={classes.root}>
+        <Box sx={rootStyles}>
         <AppBar position="static">
           <Toolbar>
           <img src={image} height="40" alt="Logo Universidad" />
@@ -136,7 +127,7 @@ export default function Profile() {
               </Menu>
           </Toolbar>
         </AppBar>
-        <Card key={user} className={classes.root} variant="outlined">
+        <Card key={user} sx={{ ...rootStyles, mt: 2 }} variant="outlined">
             <CardContent>
               <Typography variant="h5">{user}</Typography>
               <Typography variant="h6">Cuota</Typography>
@@ -173,11 +164,11 @@ export default function Profile() {
     }
 
   return (
-    <div className={classes.root}>
+    <Box sx={rootStyles}>
       <AppBar position="static">
         <Toolbar>
         <img src={image} height="40" alt="Logo Universidad" />
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6" sx={titleStyles}>
             Profile
           </Typography>
             <IconButton onClick={handleMenu} color="inherit">
@@ -193,7 +184,7 @@ export default function Profile() {
             </Menu>
         </Toolbar>
       </AppBar>
-        <Card key={filteredResults[0].name} className={classes.root} variant="outlined">
+        <Card key={filteredResults[0].name} sx={{ ...rootStyles, mt: 2 }} variant="outlined">
           <CardContent>
             <Typography variant="h5">{filteredResults[0].name}</Typography>
             <Typography variant="h6">Cuota</Typography>

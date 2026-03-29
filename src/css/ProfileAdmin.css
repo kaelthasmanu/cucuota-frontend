@@ -1,6 +1,24 @@
-.buttons-topbar{
-    display: flex;
-    flex-grow: 1;
-    padding-left: 10px;
-    gap: 10px;
-  }
+.buttons-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-grow: 1;
+  gap: 10px;
+  margin-left: 12px;
+}
+
+.MuiCard-root {
+  margin: 18px auto;
+  max-width: 960px;
+  border-radius: 16px;
+}
+
+.MuiCardContent-root {
+  padding: 24px;
+}
+
+.MuiGrid-root,
+.MuiBox-root {
+  margin-top: 14px;
+}
+

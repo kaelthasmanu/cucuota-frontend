@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types'; 
 import LinearProgress from '@mui/material/LinearProgress'; 
-import { makeStyles } from '@mui/styles';
 import { Box, Typography, Avatar, IconButton, Menu, MenuItem, Card, CardContent, Button, Dialog, DialogTitle, DialogContent } from '@mui/material';
 import AppBar from '@mui/material/AppBar'; 
 import Toolbar from '@mui/material/Toolbar'; 
@@ -25,21 +24,14 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing,
-  },
-  title: {    
-    
-  },
-  large: {
-    width: theme.spacing,
-    height: theme.spacing,
-  },
-}));
+const rootStyles = {
+  flexGrow: 1,
+  p: 2,
+};
+
+const titleStyles = {
+  flexGrow: 1,
+};
 
 function LinearProgressWithLabel(props) {
   return (
@@ -62,7 +54,6 @@ LinearProgressWithLabel.propTypes = {
 
 export default function Profile() {
   const [progress, setProgress] = React.useState(10);
-  const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const user = localStorage.getItem("user");
@@ -135,7 +126,7 @@ export default function Profile() {
     if (!filteredResults[0]) {
     // handle the case when filteredResults[0] is undefined
     return(
-      <div className={classes.root}>
+      <Box sx={rootStyles}>
       <AppBar position="static">
         <Toolbar>
         <img src={image} height="40" alt="Logo Universidad" />
@@ -192,7 +183,7 @@ export default function Profile() {
       </AppBar>
       {showUserList && <UserList />}
       {showQuotaManagement && <QuotaManagement />}
-      <Card key={user} className={classes.root} variant="outlined">
+      <Card key={user} sx={{ ...rootStyles, mt: 2 }} variant="outlined">
           <CardContent>
             <Typography variant="h5">{user}</Typography>
             <Typography variant="h6">Cuota</Typography>
@@ -235,11 +226,11 @@ export default function Profile() {
   }
 
   return (
-    <div className={classes.root}>
+    <Box sx={rootStyles}>
       <AppBar position="static">
         <Toolbar>
         <img src={image} height="40" alt="Logo Universidad" />
-          <Typography variant="h6">
+          <Typography variant="h6" sx={titleStyles}>
             Profile
           </Typography>
           <div className='buttons-topbar'>
@@ -292,7 +283,7 @@ export default function Profile() {
       </AppBar>
       {showUserList && <UserList />}
       {showQuotaManagement && <QuotaManagement />}
-        <Card key={filteredResults[0].name} className={classes.root} variant="outlined">
+        <Card key={filteredResults[0].name} sx={{ ...rootStyles, mt: 2 }} variant="outlined">
           <CardContent>
             <Typography variant="h5">{filteredResults[0].name}</Typography>
             <Typography variant="h6">Cuota</Typography>

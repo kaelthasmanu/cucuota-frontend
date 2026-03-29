@@ -1,30 +1,70 @@
+:root {
+  --bg-start: #071a52;
+  --bg-end: #0f4c81;
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --text-main: #083d77;
+  --text-sub: #404a5a;
+  --primary: #2d9cdb;
+  --primary-dark: #1e73a2;
+  --success: #27ae60;
+  --error: #e74c3c;
+}
+
 .App {
-  text-align: center;
-  background-color: gray;
   min-height: 100vh;
+  text-align: center;
+  background: linear-gradient(160deg, var(--bg-start) 0%, var(--bg-end) 100%);
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.MuiCssBaseline-root {
+  background-color: transparent;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.MuiPaper-root, .MuiCard-root, .MuiContainer-root {
+  box-shadow: 0 15px 35px rgba(0,0,0,.15);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.35);
+  backdrop-filter: blur(8px);
+}
+
+.MuiAppBar-root {
+  background: rgba(255, 255, 255, 0.92) !important;
+  color: #102a43 !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,.12) !important;
+  border-bottom: 1px solid rgba(61, 90, 128, 0.2) !important;
+}
+
+.MuiButton-contained {
+  background: linear-gradient(120deg, var(--primary), var(--primary-dark)) !important;
+  color: white !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+}
+
+.MuiButton-contained:hover {
+  background: linear-gradient(120deg, #1b7abf, #195f94) !important;
+}
+
+.MuiTextField-root {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+  .App {
+    padding: 12px;
+  }
+
+  .MuiContainer-root {
+    width: 100% !important;
+    padding: 0 8px !important;
   }
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
