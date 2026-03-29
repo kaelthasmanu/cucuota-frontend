@@ -159,7 +159,7 @@ export default function Profile() {
             </CardContent>
           </Card> 
       <p>No data available for the current user.</p>
-      </div>
+      </Box>
       ) 
     }
 
@@ -215,6 +215,6 @@ export default function Profile() {
             </Box>
           </CardContent>
         </Card> 
-    </div>
+    </Box>
   );
 }
