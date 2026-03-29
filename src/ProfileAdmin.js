@@ -320,6 +320,6 @@ export default function Profile() {
             </Dialog>
           </CardContent>
         </Card> 
-    </div>
+    </Box>
   );
 }
